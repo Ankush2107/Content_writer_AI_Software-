@@ -1,10 +1,17 @@
-export default function DashboardPage() {
+"use client";
+import { Search } from 'lucide-react';
+import React, { useState } from 'react'
+import SearchSection from './_components/SearchSection';
+import TemplateListSection from './_components/TemplateListSection';
+
+function Dashboard() {
+  const [ userSearchInput, setUserSearchInput ] = useState<string>();
   return (
-    <div className="bg-card rounded-lg shadow p-6">
-      <h1 className="text-2xl font-bold mb-4">Welcome to your Dashboard</h1>
-      <p className="text-muted-foreground">
-        This is a protected route. You can only see this if you're authenticated.
-      </p>
+    <div>
+      <SearchSection onSearchInput={ (value: string) => setUserSearchInput(value) }/>
+      <TemplateListSection userSearchInput={userSearchInput}/>
     </div>
   )
 }
+
+export default Dashboard;
