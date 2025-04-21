@@ -23,21 +23,20 @@ function TemplateListSection({ userSearchInput }: any) {
     const [ templateList, setTemplateList ] = useState(Templates);
     useEffect(() => {
         if(userSearchInput) {
-           const filterData = Templates.filter(item => 
+          const filterData = Templates.filter(item => 
             item.name.toLowerCase().includes(userSearchInput.toLowerCase())
-           );
-           setTemplateList(filterData);     
+          );
+          setTemplateList(filterData);     
         } else {
-            setTemplateList(Templates);
+          setTemplateList(Templates);
         }
     }, [userSearchInput])
-  return (
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-5 '>
+  return (                                       
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-5'>
       { templateList.map((item: TEMPLATE, index: number) => (
         <TemplateCard key={index} {...item} />
       )) }
     </div>
   )
 }
-
-export default TemplateListSection
+export default TemplateListSection;

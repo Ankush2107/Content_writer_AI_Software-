@@ -4,7 +4,7 @@ export default [
         desc: 'This is a blog description',
         category: 'blog',
         icon: 'https://cdn-icons-png.flaticon.com/128/6114/6114045.png',
-        aiPrompt: 'Give me 5 blog topic ideas in bullet points only based on the given niche topic and provide the result in rich text. Use HTML tags for titles, paragraphs, and lists in proper format.', 
+        aiPrompt: 'Create a comprehensive blog post based on the provided niche and outline. Follow these guidelines:\n\n1. Write in a professional yet engaging tone\n2. Include a catchy title\n3. Break down the content into clear sections with headings\n4. Add relevant examples and explanations\n5. Maintain proper paragraph structure\n6. Include a brief conclusion\n\nFormat the content using Markdown:\n- Use # for the main title\n- Use ## for section headings\n- Use proper paragraphs with line breaks\n- Use bullet points or numbered lists where appropriate\n- Use **bold** for emphasis on key points\n- Keep the content informative and well-structured', 
         slug: 'generate-blog-title',
         form: [
             {
