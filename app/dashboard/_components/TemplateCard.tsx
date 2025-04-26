@@ -1,21 +1,24 @@
 import React from 'react'
 import { TEMPLATE } from './TemplateListSection'
 import Image from 'next/image'
-import Link  from 'next/link'
+import Link from 'next/link'
 
 function TemplateCard(item: TEMPLATE) {
   return (
-    <Link href={'/dashboard/content/' + item.slug} className=''>
-        <div className='p-5 shadow-md rounded-md border bg-white flex flex-col justify-center gap-2 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'>
-        <Image 
+    <Link href={'/dashboard/content/' + item.slug}>
+      <div className='p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all duration-300'>
+        <div className='flex flex-col gap-3'>
+          <Image 
             src={item.icon} 
-            alt='icon' 
-            width={50} 
-            height={50} 
-        />
-        <h2>{item.name}</h2>
-        <p className='text-gray-500 line-clamp-3'>{item.desc}</p>
+            alt={item.name}
+            width={40} 
+            height={40}
+            className='mb-2'
+          />
+          <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>{item.name}</h2>
+          <p className='text-sm text-gray-500 dark:text-gray-400'>{item.desc}</p>
         </div>
+      </div>
     </Link>
   )
 }

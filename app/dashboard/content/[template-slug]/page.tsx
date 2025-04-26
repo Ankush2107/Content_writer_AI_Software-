@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import FormSection from '../_components/FormSection';
 import OutputSection from '../_components/OutputSection';
 import { TEMPLATE } from '../../_components/TemplateListSection';
@@ -8,26 +9,35 @@ import Templates from '@/app/(data)/Templates';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { ChatSession } from '@/utils/AiModels';
 import { supabase } from '@/lib/supabase';
 import { useUser } from '@clerk/nextjs';
-import { format } from 'date-fns';
+import { useTotalUsage } from '@/app/(context)/TotalUsageContext';
+import { useRouter } from 'next/navigation';
 
-interface PROPS {
-  params: Promise<{
-    'template-slug': string
-  }>
-};
-
-function CreateNewContent(props: PROPS) {
-  const params = React.use(props.params);
-  const selectedTemplate:TEMPLATE|undefined = Templates.find((item) => item.slug == params['template-slug']);
-  const [ loading, setLoading ] = useState(false);
-  const [ aiOutput, setAiOutput ] = useState<string>('');
+export default function CreateNewContent() {
+  // Use useParams hook to get the template slug
+  const params = useParams();
+  const templateSlug = params?.['template-slug'] as string;
+  
+  const selectedTemplate: TEMPLATE | undefined = Templates.find(item => item.slug === templateSlug);
+  const [formValue, setFormValue] = useState({});
+  const [aitriggered, setAiTriggered] = useState(false);
+  const [aiOutput, setAiOutput] = useState<string>('');
   const {user} = useUser();
+  const router = useRouter();
+  const [totalUsage, setTotalUsage] = useTotalUsage();
+
+  if(totalUsage > 10000){
+    return (
+      <div className='p-5'>
+        <h1 className='text-xl font-semibold mb-3'>Usage Limit Exceeded</h1>
+        <p>Your free usage limit has been exceeded. Please upgrade to continue using the service.</p>
+      </div>
+    )
+  }
 
   const GenerateAIContent = async (formData: any) => {
-    setLoading(true);
+    setAiTriggered(true);
     console.log(formData);
     const selectedPrompt = selectedTemplate?.aiPrompt;
     const FinalAIPrompt = JSON.stringify(formData) + ", " + selectedPrompt;
@@ -44,12 +54,11 @@ function CreateNewContent(props: PROPS) {
       const data = await response.json();
       setAiOutput(data?.result);
       await saveAiOutputInDB(formData, selectedTemplate?.slug, data?.result);
-      setLoading(false);
       console.log("RESULT", data.result);
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setLoading(false);
+      setAiTriggered(false);
     }
   }
 
@@ -80,7 +89,7 @@ function CreateNewContent(props: PROPS) {
         <FormSection 
           selectedTemplate={selectedTemplate} 
           userFormInput={(i:any) => GenerateAIContent(i)}
-          loading={loading}
+          loading={aitriggered}
         />
         <div className='col-span-2'>
           <OutputSection aiOutput={aiOutput} />
@@ -88,6 +97,4 @@ function CreateNewContent(props: PROPS) {
       </div>
     </div>
   )
-};
-
-export default CreateNewContent;
+}

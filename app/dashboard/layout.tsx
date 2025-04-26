@@ -1,18 +1,26 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import SideNav from './_components/SideNav';
 import Header from './_components/Header';
+import { TotalUsageProvider } from '../(context)/TotalUsageContext';
+
 function layout({ children,}: Readonly<{children: React.ReactNode}> ) {
+  const [totalUsage, setTotalUsage] = useState<Number>(0);
   return (
-    <div className='bg-slate-100 h-screen'>
-      <div className='md:w-64 hidden md:block fixed'>
-        <SideNav/>
+    <TotalUsageProvider>
+      <div className='bg-slate-100 dark:bg-gray-900 min-h-screen'>
+        <div className='md:w-64 hidden md:block fixed'>
+          <SideNav/>
+        </div>
+        <div className='md:ml-64'>
+          <Header/>
+          <div className='dark:text-white'>
+            {children}
+          </div>
+        </div>
       </div>
-      <div className='md:ml-64'>
-        <Header/>
-        {children}
-      </div>
-      
-    </div>
+    </TotalUsageProvider>
   )
 }
+
 export default layout;
